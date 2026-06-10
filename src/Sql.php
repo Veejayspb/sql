@@ -147,6 +147,42 @@ class Sql
     }
 
     /**
+     * Create new table.
+     * @param string $name - table name
+     * @param array $columns - columns list (key - column name, value - column type expression)
+     * @param array $keys - additional keys list
+     * PRIMARY KEY (`id`)
+     * FOREIGN KEY (`record_id`) REFERENCES `table` (`id`)
+     * @return bool
+     */
+    public function createTable(string $name, array $columns, array $keys = []): bool
+    {
+        $sql = "CREATE TABLE `$name` (";
+
+        $items = [];
+        foreach ($columns as $column => $expression) {
+            $items[] = "`$column` $expression";
+        }
+        $sql .= implode(', ', $items);
+
+        $sql .= empty($keys) ? '' : ', ';
+        $sql .= implode(', ', $keys);
+        $sql .= ')';
+
+        return $this->execute($sql);
+    }
+
+    /**
+     * Drop table.
+     * @param string $name - table name
+     * @return bool
+     */
+    public function dropTable(string $name): bool
+    {
+        return $this->execute("DROP TABLE `$name`");
+    }
+
+    /**
      * Prepare an SQL expression.
      * @param string $sql
      * @return PDOStatement
