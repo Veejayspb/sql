@@ -143,7 +143,7 @@ class Sql
             throw new PDOException('PDO execute error');
         }
 
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
